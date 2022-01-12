@@ -1,0 +1,45 @@
+[package]
+name = "demo-wasm-rust"
+version = "0.1.0"
+authors = ["Antoine Drabble <antoine.drabble@heig-vd.ch>"]
+edition = "2018"
+
+[lib]
+# The [lib] section describes the output format from the Rust compilation process.
+# Here, “cdylib” tells Rust to produce a “dynamic system library” that can be loaded
+# from another language (in our case, JavaScript) and including “rlib” tells Rust to
+# add a static library containing metadata about the produced library. This second
+# specifier is not necessary for our purposes - it assists with development of further
+# Rust modules that consume this crate as a dependency - but is safe to leave in.
+crate-type = ["cdylib", "rlib"]
+
+[features]
+# We ask Rust to include an optional feature console_error_panic_hook to provide
+# functionality that converts the unhandled-errors mechanism of Rust (called a panic)
+# to console errors that show up in the dev tools for debugging.
+default = ["console_error_panic_hook"]
+
+[dependencies]
+# Provides automatic generation of JavaScript bindings to our Wasm module.
+wasm-bindgen = "0.2.63"
+
+# The `console_error_panic_hook` crate provides better debugging of panics by
+# logging them with `console.error`. This is great for development, but requires
+# all the `std::fmt` and `std::panicking` infrastructure, so isn't great for
+# code size when deploying.
+console_error_panic_hook = { version = "0.1.6", optional = true }
+
+# `wee_alloc` is a tiny allocator for wasm that is only ~1K in code size
+# compared to the default allocator's ~10K. It is slower than the default
+# allocator, however.
+#
+# Unfortunately, `wee_alloc` requires nightly Rust when targeting wasm for now.
+wee_alloc = { version = "0.4.5", optional = true }
+
+[dev-dependencies]
+# Provides testing utils the wasm-bindgen library.
+wasm-bindgen-test = "0.3.13"
+
+[profile.release]
+# Tell `rustc` to optimize for small code size.
+opt-level = "s"
