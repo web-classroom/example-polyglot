@@ -10,10 +10,11 @@
     <button id='my-button'>Click me</button>
     <script type='text/javascript'>
     document.getElementById('my-button').addEventListener('click', () => {
-      var result = Module.ccall('greet', // name of C function
-                             null, // return type
-                             ['string'], // argument types
-                             ['World']); // arguments
+      var result = Module.ccall(
+        'greet', // name of C function
+        null, // return type
+        ['string'], // argument types
+        ['World']); // arguments
     })
     </script>
   </body>

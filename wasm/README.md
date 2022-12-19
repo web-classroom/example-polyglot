@@ -3,7 +3,7 @@
 ```
 brew install wasmer
 emcc -s WASM=1 -o greet.wasm greet.c
-greet.wasm
+wasmer greet.wasm
 ```
 
 ## GraalWasm
